@@ -1,67 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH.'core/MY_CRUD_Controller.php';
 
-class Categories extends MY_Controller {
+class Categories extends MY_CRUD_Controller {
     public function __construct()
     {
+        $this->model_name = 'Category_model';
+        $this->view_path = 'categories';
+        $this->entity_name = 'category';
+        $this->collection_name = 'categories';
+        $this->route_base = 'master-data/categories';
+        $this->title_index = 'Master Data Kategori';
+        $this->title_create = 'Tambah Kategori';
+        $this->title_edit = 'Edit Kategori';
         parent::__construct();
-        $this->load->model('Category_model');
-        $this->load->library('form_validation');
     }
 
-    public function index()
-    {
-        $data = [
-            'title' => 'Data Kategori',
-            'categories' => $this->Category_model->get_all(),
-        ];
-        $this->render('categories/index', $data);
-    }
-
-    public function create()
+    protected function apply_validation_rules()
     {
         $this->form_validation->set_rules('name', 'Nama Kategori', 'trim|required');
-
-        if ($this->form_validation->run() === FALSE) {
-            $data = [
-                'title' => 'Tambah Kategori',
-                'category' => null,
-            ];
-            $this->render('categories/form', $data);
-            return;
-        }
-
-        $this->Category_model->insert($this->input->post());
-        redirect('categories');
-    }
-
-    public function edit($id = null)
-    {
-        $category = $this->Category_model->get_by_id($id);
-        if (!$category) {
-            show_404();
-        }
-
-        $this->form_validation->set_rules('name', 'Nama Kategori', 'trim|required');
-
-        if ($this->form_validation->run() === FALSE) {
-            $data = [
-                'title' => 'Edit Kategori',
-                'category' => $category,
-            ];
-            $this->render('categories/form', $data);
-            return;
-        }
-
-        $this->Category_model->update($id, $this->input->post());
-        redirect('categories');
-    }
-
-    public function delete($id = null)
-    {
-        if ($id) {
-            $this->Category_model->delete($id);
-        }
-        redirect('categories');
     }
 }

@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div class="card">
-    <a class="btn" href="<?= site_url('products/create') ?>">Tambah Produk</a>
+    <a class="btn" href="<?= site_url('master-data/products/create') ?>">Tambah Produk</a>
 </div>
 <div class="card">
     <table class="table">
@@ -25,8 +25,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td>Rp <?= number_format($product->price, 0, ',', '.') ?></td>
                     <td><?= $product->stock ?></td>
                     <td>
-                        <a class="btn" href="<?= site_url('products/edit/' . $product->id) ?>">Edit</a>
-                        <a class="btn btn-danger" href="<?= site_url('products/delete/' . $product->id) ?>" onclick="return confirm('Hapus produk ini?')">Hapus</a>
+                        <a class="btn" href="<?= site_url('master-data/products/edit/' . $product->id) ?>">Edit</a>
+                        <a class="btn btn-danger" href="<?= site_url('master-data/products/delete/' . $product->id) ?>" onclick="return confirm('Hapus produk ini?')">Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

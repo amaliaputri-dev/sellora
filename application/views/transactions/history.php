@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <td>Rp <?= number_format($trx->paid, 0, ',', '.') ?></td>
                         <td>Rp <?= number_format($trx->change, 0, ',', '.') ?></td>
                         <td><?= $trx->created_at ?></td>
-                        <td><a class="btn" href="<?= site_url('transactions/receipt/' . $trx->id) ?>">Cetak</a></td>
+                        <td><a class="btn" href="<?= site_url('transaksi/struk/' . $trx->id) ?>">Cetak</a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

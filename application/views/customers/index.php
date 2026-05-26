@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div class="card">
-    <a class="btn" href="<?= site_url('customers/create') ?>">Tambah Pelanggan</a>
+    <a class="btn" href="<?= site_url('master-data/customers/create') ?>">Tambah Pelanggan</a>
 </div>
 <div class="card">
     <table class="table">
@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td><?= $customer->phone ?></td>
                     <td><?= $customer->email ?></td>
                     <td>
-                        <a class="btn" href="<?= site_url('customers/edit/' . $customer->id) ?>">Edit</a>
-                        <a class="btn btn-danger" href="<?= site_url('customers/delete/' . $customer->id) ?>" onclick="return confirm('Hapus pelanggan ini?')">Hapus</a>
+                        <a class="btn" href="<?= site_url('master-data/customers/edit/' . $customer->id) ?>">Edit</a>
+                        <a class="btn btn-danger" href="<?= site_url('master-data/customers/delete/' . $customer->id) ?>" onclick="return confirm('Hapus pelanggan ini?')">Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -37,5 +37,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </tr>
         </tbody>
     </table>
-    <a class="btn" href="<?= site_url('transactions') ?>">Kembali ke Transaksi</a>
+    <a class="btn" href="<?= site_url('transaksi') ?>">Kembali ke Transaksi</a>
 </div>

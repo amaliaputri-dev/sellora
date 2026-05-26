@@ -9,6 +9,11 @@ class User_model extends CI_Model {
         return $this->db->get_where($this->table, ['username' => $username])->row();
     }
 
+    public function get_by_id($id)
+    {
+        return $this->db->get_where($this->table, ['id' => $id])->row();
+    }
+
     public function create_default_admin()
     {
         $default = $this->db->get($this->table)->row();
