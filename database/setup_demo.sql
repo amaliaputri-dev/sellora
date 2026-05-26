@@ -1,0 +1,630 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS transaction_items;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE `users` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(100) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(20) NOT NULL DEFAULT 'admin',
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `categories` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(150) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `products` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `category_id` INT UNSIGNED NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `price` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `stock` INT NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX (`category_id`),
+  CONSTRAINT `fk_products_category` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `customers` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `phone` VARCHAR(50) DEFAULT NULL,
+  `email` VARCHAR(150) DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `transactions` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `customer_id` INT UNSIGNED NOT NULL,
+  `user_id` INT UNSIGNED NOT NULL,
+  `total` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `paid` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `change` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX (`customer_id`),
+  INDEX (`user_id`),
+  CONSTRAINT `fk_transactions_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `transaction_items` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `transaction_id` INT UNSIGNED NOT NULL,
+  `product_id` INT UNSIGNED NOT NULL,
+  `quantity` INT NOT NULL,
+  `price` DECIMAL(12,2) NOT NULL,
+  `subtotal` DECIMAL(12,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX (`transaction_id`),
+  INDEX (`product_id`),
+  CONSTRAINT `fk_transaction_items_transaction` FOREIGN KEY (`transaction_id`) REFERENCES `transactions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_transaction_items_product` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO users (id, username, password, role, created_at) VALUES
+(1, 'admin', '$2y$10$l9uR.uICJRDUm561O867Eu.mfWKT6/UoXZRnyTJLgs5.qNPALJ2AW', 'admin', '2026-05-01 08:00:00'),
+(2, 'kasir', '$2y$10$/4.kKDBqi0xl/oAkRdnWkebsMbgcExzwCjewFqogMeINaYi.jkMvC', 'kasir', '2026-05-01 08:05:00'),
+(3, 'supervisor', '$2y$10$l9uR.uICJRDUm561O867Eu.mfWKT6/UoXZRnyTJLgs5.qNPALJ2AW', 'admin', '2026-05-02 09:15:00');
+
+INSERT INTO categories (id, name, created_at) VALUES
+(1, 'Minuman', '2026-05-01 08:10:00'),
+(2, 'Makanan Ringan', '2026-05-01 08:10:00'),
+(3, 'Sembako', '2026-05-01 08:10:00'),
+(4, 'Frozen Food', '2026-05-01 08:10:00'),
+(5, 'Perawatan Diri', '2026-05-01 08:10:00'),
+(6, 'Kebersihan Rumah', '2026-05-01 08:10:00'),
+(7, 'Perlengkapan Bayi', '2026-05-01 08:10:00'),
+(8, 'ATK', '2026-05-01 08:10:00');
+
+INSERT INTO customers (id, name, phone, email, created_at) VALUES
+(1, 'Umum', NULL, NULL, '2026-05-01 08:15:00'),
+(2, 'Budi Santoso', '081234567801', 'budi.santoso@mail.com', '2026-05-01 08:16:00'),
+(3, 'Siti Aminah', '081234567802', 'siti.aminah@mail.com', '2026-05-01 08:17:00'),
+(4, 'Andi Wijaya', '081234567803', 'andi.wijaya@mail.com', '2026-05-01 08:18:00'),
+(5, 'Rina Marlina', '081234567804', 'rina.marlina@mail.com', '2026-05-01 08:19:00'),
+(6, 'Dewi Lestari', '081234567805', 'dewi.lestari@mail.com', '2026-05-01 08:20:00'),
+(7, 'Fajar Hidayat', '081234567806', 'fajar.hidayat@mail.com', '2026-05-01 08:21:00'),
+(8, 'Maya Putri', '081234567807', 'maya.putri@mail.com', '2026-05-01 08:22:00'),
+(9, 'Ilham Ramadhan', '081234567808', 'ilham.r@mail.com', '2026-05-01 08:23:00'),
+(10, 'Nadia Rahma', '081234567809', 'nadia.rahma@mail.com', '2026-05-01 08:24:00'),
+(11, 'Yoga Pratama', '081234567810', 'yoga.pratama@mail.com', '2026-05-01 08:25:00'),
+(12, 'Citra Puspita', '081234567811', 'citra.puspita@mail.com', '2026-05-01 08:26:00'),
+(13, 'Rudi Hartono', '081234567812', 'rudi.hartono@mail.com', '2026-05-01 08:27:00');
+
+INSERT INTO products (id, category_id, name, price, stock, created_at) VALUES
+(1, 1, 'Teh Botol Sosro 450ml', 5000, 80, '2026-05-01 09:00:00'),
+(2, 1, 'Aqua 600ml', 3500, 120, '2026-05-01 09:00:00'),
+(3, 1, 'Kopi Susu Botol 250ml', 9000, 60, '2026-05-01 09:00:00'),
+(4, 1, 'Jus Jeruk 300ml', 7000, 40, '2026-05-01 09:00:00'),
+(5, 2, 'Keripik Kentang BBQ', 10500, 55, '2026-05-01 09:01:00'),
+(6, 2, 'Biskuit Coklat Family Pack', 12500, 45, '2026-05-01 09:01:00'),
+(7, 2, 'Wafer Vanilla', 8500, 70, '2026-05-01 09:01:00'),
+(8, 2, 'Kacang Panggang 150gr', 11000, 35, '2026-05-01 09:01:00'),
+(9, 3, 'Beras Premium 5kg', 76000, 30, '2026-05-01 09:02:00'),
+(10, 3, 'Gula Pasir 1kg', 17500, 65, '2026-05-01 09:02:00'),
+(11, 3, 'Minyak Goreng 1L', 21000, 50, '2026-05-01 09:02:00'),
+(12, 3, 'Telur Ayam 1kg', 29000, 28, '2026-05-01 09:02:00'),
+(13, 4, 'Nugget Ayam 500gr', 34500, 25, '2026-05-01 09:03:00'),
+(14, 4, 'Sosis Sapi 375gr', 28500, 22, '2026-05-01 09:03:00'),
+(15, 4, 'Kentang Goreng Frozen 1kg', 32000, 18, '2026-05-01 09:03:00'),
+(16, 5, 'Sabun Mandi Cair 450ml', 18500, 48, '2026-05-01 09:04:00'),
+(17, 5, 'Shampoo 170ml', 22000, 42, '2026-05-01 09:04:00'),
+(18, 5, 'Pasta Gigi 190gr', 14500, 75, '2026-05-01 09:04:00'),
+(19, 6, 'Deterjen Bubuk 800gr', 19500, 38, '2026-05-01 09:05:00'),
+(20, 6, 'Pembersih Lantai 800ml', 16500, 41, '2026-05-01 09:05:00'),
+(21, 6, 'Sabun Cuci Piring 750ml', 15500, 39, '2026-05-01 09:05:00'),
+(22, 7, 'Popok Bayi M 20pcs', 49000, 27, '2026-05-01 09:06:00'),
+(23, 7, 'Tisu Basah Bayi 50s', 12500, 58, '2026-05-01 09:06:00'),
+(24, 8, 'Buku Tulis 38 Lembar', 4500, 110, '2026-05-01 09:07:00'),
+(25, 8, 'Pulpen Gel Hitam', 3500, 140, '2026-05-01 09:07:00'),
+(26, 8, 'Spidol Permanen', 6500, 50, '2026-05-01 09:07:00'),
+(27, 3, 'Mie Instan Goreng', 3500, 200, '2026-05-01 09:08:00'),
+(28, 2, 'Coklat Bar 40gr', 7000, 90, '2026-05-01 09:08:00'),
+(29, 1, 'Susu UHT Coklat 200ml', 6000, 85, '2026-05-01 09:08:00'),
+(30, 6, 'Tisu Gulung 10 Roll', 28500, 33, '2026-05-01 09:08:00');
+
+INSERT INTO transactions (id, customer_id, user_id, total, paid, `change`, created_at) VALUES
+(1, 1, 2, 22500, 30000, 7500, '2026-05-10 09:05:12'),
+(2, 2, 2, 47500, 50000, 2500, '2026-05-10 10:16:44'),
+(3, 1, 2, 104000, 110000, 6000, '2026-05-10 11:22:01'),
+(4, 3, 1, 40500, 50000, 9500, '2026-05-10 13:45:17'),
+(5, 1, 2, 82000, 100000, 18000, '2026-05-11 08:14:30'),
+(6, 4, 2, 52000, 60000, 8000, '2026-05-11 09:33:09'),
+(7, 5, 1, 135500, 150000, 14500, '2026-05-11 12:07:55'),
+(8, 1, 2, 30000, 50000, 20000, '2026-05-11 15:51:11'),
+(9, 6, 2, 72500, 100000, 27500, '2026-05-12 10:12:48'),
+(10, 1, 2, 118500, 120000, 1500, '2026-05-12 16:40:36'),
+(11, 7, 1, 59500, 60000, 500, '2026-05-13 14:22:13'),
+(12, 1, 2, 110000, 120000, 10000, '2026-05-14 18:05:00');
+
+INSERT INTO transaction_items (id, transaction_id, product_id, quantity, price, subtotal) VALUES
+(1, 1, 1, 1, 5000, 5000),
+(2, 1, 5, 1, 10500, 10500),
+(3, 1, 25, 2, 3500, 7000),
+(4, 2, 16, 1, 18500, 18500),
+(5, 2, 18, 1, 14500, 14500),
+(6, 2, 7, 1, 8500, 8500),
+(7, 2, 29, 1, 6000, 6000),
+(8, 3, 9, 1, 76000, 76000),
+(9, 3, 10, 1, 17500, 17500),
+(10, 3, 27, 3, 3500, 10500),
+(11, 4, 2, 2, 3500, 7000),
+(12, 4, 6, 1, 12500, 12500),
+(13, 4, 20, 1, 16500, 16500),
+(14, 4, 24, 1, 4500, 4500),
+(15, 5, 13, 1, 34500, 34500),
+(16, 5, 14, 1, 28500, 28500),
+(17, 5, 29, 2, 6000, 12000),
+(18, 5, 25, 2, 3500, 7000),
+(19, 6, 17, 1, 22000, 22000),
+(20, 6, 18, 1, 14500, 14500),
+(21, 6, 21, 1, 15500, 15500),
+(22, 7, 22, 1, 49000, 49000),
+(23, 7, 23, 2, 12500, 25000),
+(24, 7, 30, 1, 28500, 28500),
+(25, 7, 25, 2, 3500, 7000),
+(26, 7, 2, 2, 3500, 7000),
+(27, 7, 29, 2, 6000, 12000),
+(28, 7, 28, 1, 7000, 7000),
+(29, 8, 3, 1, 9000, 9000),
+(30, 8, 28, 1, 7000, 7000),
+(31, 8, 29, 1, 6000, 6000),
+(32, 8, 24, 1, 4500, 4500),
+(33, 8, 25, 1, 3500, 3500),
+(34, 9, 11, 1, 21000, 21000),
+(35, 9, 19, 1, 19500, 19500),
+(36, 9, 20, 1, 16500, 16500),
+(37, 9, 21, 1, 15500, 15500),
+(38, 10, 22, 1, 49000, 49000),
+(39, 10, 16, 1, 18500, 18500),
+(40, 10, 17, 1, 22000, 22000),
+(41, 10, 18, 2, 14500, 29000),
+(42, 11, 12, 1, 29000, 29000),
+(43, 11, 27, 4, 3500, 14000),
+(44, 11, 1, 1, 5000, 5000),
+(45, 11, 2, 1, 3500, 3500),
+(46, 11, 25, 1, 3500, 3500),
+(47, 11, 24, 1, 4500, 4500),
+(48, 12, 9, 1, 76000, 76000),
+(49, 12, 10, 1, 17500, 17500),
+(50, 12, 2, 1, 3500, 3500),
+(51, 12, 1, 1, 5000, 5000),
+(52, 12, 25, 1, 3500, 3500),
+(53, 12, 24, 1, 4500, 4500);
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+## Open tabs:
+- seed_demo.sql: database/seed_demo.sql
+
+## My request for Codex:
+bikin yang paling aman aja
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+ 
+\n
+#+#+#+#+assistant to=functions.apply_patch code
