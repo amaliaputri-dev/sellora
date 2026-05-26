@@ -62,7 +62,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div><strong>Sistem Kasir</strong></div>
     <div class="topbar-actions">
         <?php if (!empty($current_user->username)): ?>
-            <span class="topbar-user">Halo, <?= html_escape($current_user->username) ?></span>
+            <span class="topbar-user">Halo, <?= html_escape($current_user->username) ?> (<?= html_escape($current_user->role ?? 'user') ?>)</span>
         <?php endif; ?>
         <a class="btn btn-topbar" href="<?= site_url('auth/logout') ?>">Logout</a>
     </div>

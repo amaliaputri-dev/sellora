@@ -59,6 +59,11 @@ $route['auth/logout'] = 'auth/logout';
 
 $route['dashboard'] = 'dashboard';
 
+$route['akun/users'] = 'users';
+$route['akun/users/create'] = 'users/create';
+$route['akun/users/edit/(:num)'] = 'users/edit/$1';
+$route['akun/users/delete/(:num)'] = 'users/delete/$1';
+
 $route['master-data'] = 'dashboard';
 $route['master-data/categories'] = 'categories';
 $route['master-data/categories/create'] = 'categories/create';

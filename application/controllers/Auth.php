@@ -15,7 +15,7 @@ class Auth extends CI_Controller {
             redirect('dashboard');
         }
 
-        $this->User_model->create_default_admin();
+        $this->User_model->create_default_users();
         $data = [
             'title' => 'Login',
             'message' => $this->input->get('message', TRUE),
@@ -29,7 +29,7 @@ class Auth extends CI_Controller {
             redirect('dashboard');
         }
 
-        $this->User_model->create_default_admin();
+        $this->User_model->create_default_users();
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
 

@@ -14,6 +14,7 @@ class Customers extends MY_CRUD_Controller {
         $this->title_create = 'Tambah Pelanggan';
         $this->title_edit = 'Edit Pelanggan';
         parent::__construct();
+        $this->require_role('admin');
     }
 
     protected function apply_validation_rules()

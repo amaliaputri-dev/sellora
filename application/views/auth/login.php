@@ -42,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
         <button class="btn" type="submit">Masuk</button>
     </form>
-    <div class="note">Akun default: <strong>admin</strong> / <strong>admin123</strong></div>
+    <div class="note">Akun default admin: <strong>admin</strong> / <strong>admin123</strong><br>Akun default kasir: <strong>kasir</strong> / <strong>kasir123</strong></div>
 </div>
 </body>
 </html>

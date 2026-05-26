@@ -44,4 +44,17 @@ class MY_Controller extends CI_Controller {
 
         return $user;
     }
+
+    protected function require_role($roles)
+    {
+        $roles = (array) $roles;
+        if (!in_array($this->current_user->role, $roles, TRUE)) {
+            show_error('Anda tidak memiliki akses ke halaman ini.', 403, 'Akses Ditolak');
+        }
+    }
+
+    protected function is_admin()
+    {
+        return !empty($this->current_user->role) && $this->current_user->role === 'admin';
+    }
 }

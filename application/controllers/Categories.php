@@ -14,6 +14,7 @@ class Categories extends MY_CRUD_Controller {
         $this->title_create = 'Tambah Kategori';
         $this->title_edit = 'Edit Kategori';
         parent::__construct();
+        $this->require_role('admin');
     }
 
     protected function apply_validation_rules()

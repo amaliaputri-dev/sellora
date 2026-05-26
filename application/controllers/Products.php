@@ -14,6 +14,7 @@ class Products extends MY_CRUD_Controller {
         $this->title_create = 'Tambah Produk';
         $this->title_edit = 'Edit Produk';
         parent::__construct();
+        $this->require_role('admin');
         $this->load->model('Category_model');
         $this->form_data['categories'] = $this->Category_model->get_all();
     }

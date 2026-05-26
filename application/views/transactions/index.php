@@ -90,12 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <form method="post" action="<?= site_url('transaksi/checkout') ?>">
             <div class="form-group">
                 <label>Pelanggan</label>
-                <select name="customer_id" required>
-                    <option value="">-- Pilih Pelanggan --</option>
-                    <?php foreach ($customers as $customer): ?>
-                        <option value="<?= $customer->id ?>"><?= $customer->name ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="text" value="Umum" readonly>
             </div>
             <div class="form-group">
                 <label>Bayar</label>

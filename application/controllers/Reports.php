@@ -5,6 +5,7 @@ class Reports extends MY_Controller {
     public function __construct()
     {
         parent::__construct();
+        $this->require_role('admin');
         $this->load->model('Transaction_model');
     }
 

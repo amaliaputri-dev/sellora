@@ -17,7 +17,6 @@ class Transactions extends MY_Controller {
         $data = [
             'title' => 'Transaksi Kasir',
             'products' => $this->Product_model->search($search),
-            'customers' => $this->Customer_model->get_all(),
             'cart' => $this->get_cart(),
             'search' => $search,
             'error' => $this->input->get('error', TRUE),
@@ -74,14 +73,13 @@ class Transactions extends MY_Controller {
             $this->redirect_with_error('Keranjang kosong.');
         }
 
-        $this->form_validation->set_rules('customer_id', 'Pelanggan', 'required');
         $this->form_validation->set_rules('amount_paid', 'Bayar', 'required|numeric');
 
         if ($this->form_validation->run() === FALSE) {
             $this->redirect_with_error(trim(strip_tags(validation_errors(' ', ' '))));
         }
 
-        $customer_id = $this->input->post('customer_id');
+        $customer_id = $this->Customer_model->get_or_create_general_customer_id();
         $amount_paid = (float) $this->input->post('amount_paid');
         $total = array_sum(array_map(function ($item) {
             return $item['price'] * $item['quantity'];

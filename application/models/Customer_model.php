@@ -19,6 +19,23 @@ class Customer_model extends CI_Model {
         return $this->db->get_where($this->table, ['id' => $id])->row();
     }
 
+    public function get_or_create_general_customer_id()
+    {
+        $customer = $this->db->get_where($this->table, ['name' => 'Umum'])->row();
+        if ($customer) {
+            return $customer->id;
+        }
+
+        $this->db->insert($this->table, [
+            'name' => 'Umum',
+            'phone' => null,
+            'email' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return $this->db->insert_id();
+    }
+
     public function insert($data)
     {
         $insert = [
